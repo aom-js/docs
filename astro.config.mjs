@@ -4,7 +4,6 @@ import starlight from "@astrojs/starlight";
 import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const base = "/docs";
 const content = fileURLToPath(new URL("src/content/docs/", import.meta.url));
 
 /**
@@ -21,7 +20,7 @@ function mdLinks() {
         const slug = relative(content, resolve(dirname(from), path))
           .replace(/\.md$/, "")
           .replace(/(^|\/)index$/, "");
-        node.properties.href = `${base}/${slug ? `${slug}/` : ""}${hash ? `#${hash}` : ""}`;
+        node.properties.href = `/${slug ? `${slug}/` : ""}${hash ? `#${hash}` : ""}`;
       }
     }
     node.children?.forEach((/** @type {any} */ c) => walk(c, from));
@@ -30,8 +29,7 @@ function mdLinks() {
 }
 
 export default defineConfig({
-  site: "https://aom-js.github.io",
-  base,
+  site: "https://aom.js.org",
   markdown: { rehypePlugins: [mdLinks] },
   integrations: [
     starlight({
