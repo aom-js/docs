@@ -1,0 +1,52 @@
+# Проверка текстов против кода ядра и выкладка сайта на GitHub Pages.
+name: pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # пути и символы в текстах сверяются с кодом этой ветки ядра; другая — переменная репозитория MAIN_REF
+      - uses: actions/checkout@v4
+        with:
+          repository: aom-js/main
+          ref: ${{ vars.MAIN_REF || 'development-claude' }}
+          path: .main
+      - uses: oven-sh/setup-bun@v2
+      # тексты ссылаются и на собранное (`packages/<pkg>/package.json`, `dist/`): ядро собирается до сторожа
+      - run: node scripts/prebuild.js && bun install --frozen-lockfile && bun run build
+        working-directory: .main
+      - run: bun install --frozen-lockfile
+      - run: bun run test
+        env:
+          AOM_MAIN: .main
+      - run: bun run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
