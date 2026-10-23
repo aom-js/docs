@@ -1,0 +1,89 @@
+---
+import Default from "@astrojs/starlight/components/Footer.astro";
+
+const en = Astro.locals.starlightRoute.lang === "en";
+---
+
+<Default />
+<p class="cookies">
+  <button type="button" data-cc="show-consentModal">
+    {en ? "Cookie settings" : "Настройки cookies"}
+  </button>
+</p>
+
+<script>
+  import "vanilla-cookieconsent/dist/cookieconsent.css";
+  import { run } from "vanilla-cookieconsent";
+
+  // Баннер согласия: включает скрипты с `data-category="analytics"` (Google Analytics в astro.config.mjs)
+  // только после «Принять»; при отзыве согласия стирает cookies аналитики и перезагружает страницу,
+  // чтобы уже загруженный счётчик перестал работать.
+  run({
+    categories: {
+      necessary: { readOnly: true, enabled: true },
+      analytics: { autoClear: { cookies: [{ name: /^_ga/ }], reloadPage: true } },
+    },
+    language: {
+      default: "ru",
+      autoDetect: "document",
+      translations: {
+        ru: {
+          consentModal: {
+            title: "Cookies для статистики",
+            description:
+              "Сайт может использовать Google Analytics, чтобы понимать, какие страницы читают. Без вашего согласия статистика не собирается.",
+            acceptAllBtn: "Принять",
+            acceptNecessaryBtn: "Отклонить",
+          },
+          preferencesModal: { sections: [] },
+        },
+        en: {
+          consentModal: {
+            title: "Cookies for statistics",
+            description:
+              "This site can use Google Analytics to see which pages are read. No statistics are collected without your consent.",
+            acceptAllBtn: "Accept",
+            acceptNecessaryBtn: "Reject",
+          },
+          preferencesModal: { sections: [] },
+        },
+      },
+    },
+  });
+</script>
+
+<style>
+  .cookies {
+    margin-top: 1.5rem;
+    font-size: var(--sl-text-xs);
+  }
+  .cookies button {
+    all: unset;
+    cursor: pointer;
+    color: var(--sl-color-gray-3);
+    text-decoration: underline;
+  }
+  .cookies button:focus-visible {
+    outline: 2px solid var(--sl-color-accent);
+  }
+  /* баннер в цветах темы Starlight — светлой и тёмной */
+  :global(#cc-main) {
+    --cc-font-family: var(--sl-font);
+    --cc-bg: var(--sl-color-bg-nav);
+    --cc-primary-color: var(--sl-color-white);
+    --cc-secondary-color: var(--sl-color-gray-2);
+    --cc-btn-primary-bg: var(--sl-color-accent);
+    --cc-btn-primary-border-color: var(--sl-color-accent);
+    --cc-btn-primary-color: var(--sl-color-black);
+    --cc-btn-primary-hover-bg: var(--sl-color-accent-high);
+    --cc-btn-primary-hover-border-color: var(--sl-color-accent-high);
+    --cc-btn-primary-hover-color: var(--sl-color-black);
+    --cc-btn-secondary-bg: var(--sl-color-gray-6);
+    --cc-btn-secondary-border-color: var(--sl-color-gray-5);
+    --cc-btn-secondary-color: var(--sl-color-white);
+    --cc-btn-secondary-hover-bg: var(--sl-color-gray-5);
+    --cc-btn-secondary-hover-border-color: var(--sl-color-gray-4);
+    --cc-btn-secondary-hover-color: var(--sl-color-white);
+    --cc-separator-border-color: var(--sl-color-hairline);
+  }
+</style>

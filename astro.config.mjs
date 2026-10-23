@@ -42,18 +42,25 @@ export default defineConfig({
       },
       social: [{ icon: "github", label: "GitHub", href: "https://github.com/aom-js/main" }],
       editLink: { baseUrl: "https://github.com/aom-js/docs/edit/main/" },
-      // Google Analytics
+      // Google Analytics выключен (`text/plain`), пока посетитель не согласится: включает баннер в Footer.astro
       head: [
         {
           tag: "script",
-          attrs: { src: "https://www.googletagmanager.com/gtag/js?id=G-YJGS9P570Z", async: true },
+          attrs: {
+            type: "text/plain",
+            "data-category": "analytics",
+            src: "https://www.googletagmanager.com/gtag/js?id=G-YJGS9P570Z",
+            async: true,
+          },
         },
         {
           tag: "script",
+          attrs: { type: "text/plain", "data-category": "analytics" },
           content:
             "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YJGS9P570Z');",
         },
       ],
+      components: { Footer: "./src/components/Footer.astro" },
       sidebar: [
         { label: "Обзор", translations: { en: "Overview" }, link: "/" },
         {
