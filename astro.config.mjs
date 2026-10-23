@@ -36,6 +36,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "aom-js",
+      logo: { src: "./src/assets/aom-logo.svg" },
       defaultLocale: "root",
       locales: {
         root: { label: "Русский", lang: "ru" },
