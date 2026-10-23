@@ -42,6 +42,18 @@ export default defineConfig({
       },
       social: [{ icon: "github", label: "GitHub", href: "https://github.com/aom-js/main" }],
       editLink: { baseUrl: "https://github.com/aom-js/docs/edit/main/" },
+      // Google Analytics
+      head: [
+        {
+          tag: "script",
+          attrs: { src: "https://www.googletagmanager.com/gtag/js?id=G-YJGS9P570Z", async: true },
+        },
+        {
+          tag: "script",
+          content:
+            "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YJGS9P570Z');",
+        },
+      ],
       sidebar: [
         { label: "Обзор", translations: { en: "Overview" }, link: "/" },
         {
