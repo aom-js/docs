@@ -11,4 +11,4 @@ bun run test    # сторож ссылок: клон ядра — ../main ил�
 bun run build   # dist/
 ```
 
-Push в `main` проверяет тексты против кода ядра (ветка — переменная репозитория `MAIN_REF`) и выкладывает сайт (`.github/workflows/pages.yml`). В настройках репозитория: Pages → Source → GitHub Actions.
+Push в `main` проверяет тексты против кода ядра (ветка ядра по умолчанию, другая — переменная репозитория `MAIN_REF`) и выкладывает сайт (`.github/workflows/pages.yml`). В настройках репозитория: Pages → Source → GitHub Actions.

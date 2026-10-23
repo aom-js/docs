@@ -21,11 +21,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # пути и символы в текстах сверяются с кодом этой ветки ядра; другая — переменная репозитория MAIN_REF
+      # пути и символы в текстах сверяются с кодом ветки ядра по умолчанию; другая — переменная репозитория MAIN_REF
       - uses: actions/checkout@v4
         with:
           repository: aom-js/main
-          ref: ${{ vars.MAIN_REF || 'development-claude' }}
+          ref: ${{ vars.MAIN_REF }}
           path: .main
       - uses: oven-sh/setup-bun@v2
       # тексты ссылаются и на собранное (`packages/<pkg>/package.json`, `dist/`): ядро собирается до сторожа
