@@ -6,7 +6,8 @@ import { fileURLToPath } from "node:url";
 /**
  * Сторож текстов сайта (`src/content/docs/**.md`): ссылки ведут только на то, что есть в текстах и в ядре.
  * Тексты и код ядра — одно дерево путей: страница `packages/router.md` и файл `packages/router/src/…` из клона
- * `aom-js/main` (`AOM_MAIN`, по умолчанию `../main` рядом с этим репозиторием) не пересекаются. Пути в обратных
+ * `aom-js/main` (`AOM_MAIN`, по умолчанию `../main` рядом с этим репозиторием) не пересекаются; к ним же — примеры
+ * учебника `examples/…` этого репозитория. Пути в обратных
  * кавычках — от файла страницы, от каталога пакета (у страницы пакета), от корня ядра или короткое имя (хвост
  * пути) любого файла; адрес markdown-ссылки — только страница от файла страницы, как открывает GitHub. Якорь
  * `файл#якорь` и знак раздела с «Заголовком» находят заголовок; `путь` (`Символ`) — слово символа есть в файле;
@@ -15,6 +16,7 @@ import { fileURLToPath } from "node:url";
  */
 const HERE = dirname(fileURLToPath(import.meta.url));
 const DOCS = resolve(HERE, "../src/content/docs");
+const REPO = resolve(HERE, "..");
 const MAIN = resolve(process.env.AOM_MAIN ?? resolve(HERE, "../../main"));
 const rules: typeof import("../../main/scripts/links-rules") = await import(
   join(MAIN, "scripts/links-rules.ts")
@@ -35,13 +37,14 @@ function walk(root: string, dir = "", out: string[] = []): string[] {
 const docs = walk(DOCS)
   .filter((f) => f.endsWith(".md"))
   .sort();
-const index = [...new Set([...walk(DOCS), ...walk(MAIN)])].sort();
+const index = [...new Set([...walk(DOCS), ...walk(MAIN), ...walk(REPO, "examples")])].sort();
 
-/** Файл дерева путей → абсолютный путь: сначала тексты, затем ядро; `null` — нет ни там, ни там. */
+/** Файл дерева путей → абсолютный путь: тексты, ядро, примеры учебника; `null` — нигде нет. */
 const at = (rel: string) =>
   rel.startsWith("..")
     ? null
-    : [join(DOCS, rel), join(MAIN, rel)].find((abs) => existsSync(abs)) ?? null;
+    : ([join(DOCS, rel), join(MAIN, rel)].find((abs) => existsSync(abs)) ??
+      (rel.startsWith("examples/") && existsSync(join(REPO, rel)) ? join(REPO, rel) : null));
 
 const files = new Map<string, string>();
 const read = (rel: string) =>

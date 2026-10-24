@@ -10,13 +10,23 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@aom-js/api": "0.1.0",
+    "@aom-js/core": "0.1.0",
+    "@aom-js/router": "0.1.0",
+    "@aom-js/schemer": "0.1.0",
     "@astrojs/markdown-remark": "^7.3.4",
     "@astrojs/starlight": "^0.42.7",
     "astro": "^7.4.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.3",
+    "class-validator-jsonschema": "^5.2.0",
+    "reflect-metadata": "^0.2.2",
     "sharp": "^0.35.5",
     "vanilla-cookieconsent": "3.1.0"
   },
   "devDependencies": {
+    "@swc/core": "^1.16.20",
+    "unplugin-swc": "^2.0.0",
     "vitest": "^5.0.5"
   }
 }

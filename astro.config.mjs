@@ -76,7 +76,14 @@ export default defineConfig({
         {
           label: "Рецепты",
           translations: { en: "Cookbook" },
-          items: [{ autogenerate: { directory: "cookbook" } }],
+          items: [
+            { autogenerate: { directory: "cookbook" } },
+            {
+              label: "Учебник",
+              translations: { en: "Tutorial" },
+              items: [{ autogenerate: { directory: "tutorial" } }],
+            },
+          ],
         },
       ],
     }),
