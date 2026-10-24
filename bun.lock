@@ -5,10 +5,10 @@
     "": {
       "name": "@aom-js/docs",
       "dependencies": {
-        "@aom-js/api": "0.1.0",
-        "@aom-js/core": "0.1.0",
-        "@aom-js/router": "0.1.0",
-        "@aom-js/schemer": "0.1.0",
+        "@aom-js/api": "0.1.2",
+        "@aom-js/core": "0.1.2",
+        "@aom-js/router": "0.1.2",
+        "@aom-js/schemer": "0.1.2",
         "@astrojs/markdown-remark": "^7.3.4",
         "@astrojs/starlight": "^0.42.7",
         "astro": "^7.4.2",
@@ -27,15 +27,15 @@
     },
   },
   "packages": {
-    "@aom-js/api": ["@aom-js/api@0.1.0", "", { "dependencies": { "@aom-js/core": "0.1.0", "@aom-js/router": "0.1.0", "@aom-js/schemer": "0.1.0", "@aom-js/visualizer": "0.1.0", "dayjs": "^1.11.21", "es-toolkit": "^1.50.0", "reflect-metadata": "^0.2.2", "ws": "^8.21.2" } }, "sha512-ASf8lxB6ClE2BRIR+49ZBUqEB8A3FSKoG0NAcQ9CpesGZtBl31XXhjZrFag8jiBAoJJECtbmZbVQzSavw8EGvg=="],
+    "@aom-js/api": ["@aom-js/api@0.1.2", "", { "dependencies": { "@aom-js/core": "0.1.2", "@aom-js/router": "0.1.2", "@aom-js/schemer": "0.1.2", "@aom-js/visualizer": "0.1.2", "dayjs": "^1.11.21", "es-toolkit": "^1.50.0", "reflect-metadata": "^0.2.2", "ws": "^8.21.2" } }, "sha512-hnmMzwBbP5AqJ0Dqlie4s551L1QdMnNHdtPn+XsxNFZ1HPjHIrIm/TtPO/blDV/spD/G/7xUhc9GsN+8KJHHuw=="],
 
-    "@aom-js/core": ["@aom-js/core@0.1.0", "", {}, "sha512-/O2xK9j8InuKn9YOG/YsAAMib0YnmWU22QeeVvtsCyJ68Ai+LZnPwCJlWQeDwX2gQFP5K23moADQxeGWLLkDgw=="],
+    "@aom-js/core": ["@aom-js/core@0.1.2", "", {}, "sha512-wOO7AntHy1peWcgvDdRwSKkzhgOrNTZmMEMrAn5hR1se34h0GJu5QS6sKqsJfrEnt2/bc/4DEENVhlxJSHE2hA=="],
 
-    "@aom-js/router": ["@aom-js/router@0.1.0", "", { "dependencies": { "@aom-js/core": "0.1.0", "@aom-js/schemer": "0.1.0", "openapi3-ts": "^4.6.1", "reflect-metadata": "^0.2.2", "rxjs": "^7.8.2" } }, "sha512-1V4vLsHyYMxpWQgLmynxfeCZPoD+/ltsJSYbJ00mUUuPfJpFgPN7t4nQ0CqZwXkzUSwVdHldq+BL7xwXhMwZtg=="],
+    "@aom-js/router": ["@aom-js/router@0.1.2", "", { "dependencies": { "@aom-js/core": "0.1.2", "@aom-js/schemer": "0.1.2", "openapi3-ts": "^4.6.1", "reflect-metadata": "^0.2.2", "rxjs": "^7.8.2" } }, "sha512-vH6/5/REFUktUEMCD/3I1ytlG4PuutA+bSsWhaZq3Iwc289eYdvTgYjdLVr/10MoTz0kXp7ilI5D4GwgjleA+Q=="],
 
-    "@aom-js/schemer": ["@aom-js/schemer@0.1.0", "", { "dependencies": { "@aom-js/core": "0.1.0", "class-transformer": "^0.5.1", "class-validator": "^0.14.3", "class-validator-jsonschema": "^5.1.0", "reflect-metadata": "^0.2.2" } }, "sha512-tQq3pp9p2WmS7/d3siGklRlq/6Qu5Zj5LV4W7965AVl09zsacHdpsS4Xgyvo1zVkaXYoVvURvh3TdvEJ6IcOQQ=="],
+    "@aom-js/schemer": ["@aom-js/schemer@0.1.2", "", { "dependencies": { "@aom-js/core": "0.1.2", "class-transformer": "^0.5.1", "class-validator": "^0.14.3", "class-validator-jsonschema": "^5.1.0", "reflect-metadata": "^0.2.2" } }, "sha512-vA4lkyFFGCtYjw2QTsdN94VCkJY0IM+hKv6gCwVKMd3qbl6fjDbjh3pHMHrwR5my39EognmChjutBktFewEIQA=="],
 
-    "@aom-js/visualizer": ["@aom-js/visualizer@0.1.0", "", { "dependencies": { "@aom-js/core": "0.1.0", "@aom-js/router": "0.1.0", "@aom-js/schemer": "0.1.0", "reflect-metadata": "^0.2.2" } }, "sha512-9Fd9Pvm59cGdC/AGBY7w8gjyHPs3jWGQC7XqD0/T6Z0Q4RhI7+fqQQ7RXayZezsMEDemSVWqoFK8cFjlKqRxqA=="],
+    "@aom-js/visualizer": ["@aom-js/visualizer@0.1.2", "", { "dependencies": { "@aom-js/core": "0.1.2", "@aom-js/router": "0.1.2", "@aom-js/schemer": "0.1.2", "reflect-metadata": "^0.2.2" } }, "sha512-QEHInr15qHrgVyjO/q575qoQXNOz16AhTWL3epzeXkX33Sqf8UkFtrud0x6Cs2EyThqMpVVVVjcGz271/I9oYA=="],
 
     "@astrojs/compiler-binding": ["@astrojs/compiler-binding@0.5.2", "", { "optionalDependencies": { "@astrojs/compiler-binding-android-arm64": "0.5.2", "@astrojs/compiler-binding-darwin-arm64": "0.5.2", "@astrojs/compiler-binding-darwin-x64": "0.5.2", "@astrojs/compiler-binding-linux-arm64-gnu": "0.5.2", "@astrojs/compiler-binding-linux-arm64-musl": "0.5.2", "@astrojs/compiler-binding-linux-x64-gnu": "0.5.2", "@astrojs/compiler-binding-linux-x64-musl": "0.5.2", "@astrojs/compiler-binding-wasm32-wasi": "0.5.2", "@astrojs/compiler-binding-win32-arm64-msvc": "0.5.2", "@astrojs/compiler-binding-win32-x64-msvc": "0.5.2" } }, "sha512-lEn76+0JcMQ5RDXU0wSMWJg2ZppiZvSULpghC29cfv4o9bhvWFDbQjsCtvjjXN9iVLFQ7fL3wTR2L2UU13mP8g=="],
 
