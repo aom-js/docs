@@ -9,10 +9,10 @@ sidebar:
 ## Установка
 
 ```bash
-npm install @aom-js/api@0.1.3 @aom-js/router@0.1.3 @aom-js/schemer@0.1.3 reflect-metadata
+npm install @aom-js/api@0.2.0 @aom-js/router@0.2.0 @aom-js/schemer@0.2.0 reflect-metadata
 ```
 
-Все пакеты `@aom-js/*` ставятся одной версией: каждый из них зависит от соседей ровно этой версии, и разные версии дали бы в проекте две копии ядра. Примеры учебника идут на 0.1.3. Для проверки данных (глава 6) понадобятся ещё `class-validator` и `class-transformer` — те же версии, что у `@aom-js/schemer`, иначе у проверок окажется два реестра.
+Все пакеты `@aom-js/*` ставятся одной версией: каждый из них зависит от соседей ровно этой версии, и разные версии дали бы в проекте две копии ядра. Примеры учебника идут на 0.2.0. Для проверки данных (глава 6) понадобятся ещё `class-validator` и `class-transformer` — те же версии, что у `@aom-js/schemer`, иначе у проверок окажется два реестра.
 
 В `tsconfig.json` нужны legacy-декораторы с метаданными типов:
 
@@ -78,7 +78,7 @@ class GreetingsRoutes extends RoutesStructure<GreetingsRoute> {}
 export class ModuleRoot extends BaseRootController {
   static readonly RoutesStructure = GreetingsRoutes;
 
-  readonly RouteElement = GreetingsRoute;
+  static readonly RouteElement = GreetingsRoute;
 
   readonly ident = "greetings";
 

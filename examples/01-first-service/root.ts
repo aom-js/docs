@@ -16,7 +16,7 @@ class GreetingsRoutes extends RoutesStructure<GreetingsRoute> {}
 export class ModuleRoot extends BaseRootController {
   static readonly RoutesStructure = GreetingsRoutes;
 
-  readonly RouteElement = GreetingsRoute;
+  static readonly RouteElement = GreetingsRoute;
 
   readonly ident = "greetings";
 

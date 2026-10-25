@@ -14,7 +14,7 @@ class CountriesRoutes extends RoutesStructure<CountriesRoute> {}
 export class ModuleRoot extends BaseRootController {
   static readonly RoutesStructure = CountriesRoutes;
 
-  readonly RouteElement = CountriesRoute;
+  static readonly RouteElement = CountriesRoute;
 
   readonly ident = "countries";
 

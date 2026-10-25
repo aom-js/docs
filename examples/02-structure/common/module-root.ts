@@ -13,7 +13,7 @@ class ModuleRoutes extends RoutesStructure<ModuleRoute> {}
 export class ModuleRootController extends BaseRootController {
   static readonly RoutesStructure = ModuleRoutes;
 
-  readonly RouteElement = ModuleRoute;
+  static readonly RouteElement = ModuleRoute;
 
   // у маршрутов пока нет своих маркеров — переносить в список нечего
   markersToRoute() {}

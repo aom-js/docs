@@ -53,7 +53,7 @@ async function events(token: string) {
 describe("WebSocket-точка", () => {
   it("соединение с токеном попадает в реестр под id пользователя", async () => {
     await connect("token-ann");
-    expect(Chat.sockets.connections.get("ann")).toHaveLength(1);
+    expect(Chat.Sockets.connections.get("ann")).toHaveLength(1);
   });
 
   it("без токена или с чужим токеном соединение рвётся, причина — только в журнале сервера", async () => {
@@ -95,7 +95,7 @@ describe("WebSocket-точка", () => {
   it("закрытое соединение снимается с реестра, ключ остаётся с пустым списком", async () => {
     const bob = await connect("token-bob");
     bob.ws.close();
-    await vi.waitFor(() => expect(Chat.sockets.connections.get("bob")).toEqual([]));
+    await vi.waitFor(() => expect(Chat.Sockets.connections.get("bob")).toEqual([]));
   });
 });
 

@@ -19,7 +19,7 @@ class NotesRoutes extends RoutesStructure<NotesRoute> {}
 export class ModuleRoot extends BaseRootController {
   static readonly RoutesStructure = NotesRoutes;
 
-  readonly RouteElement = NotesRoute;
+  static readonly RouteElement = NotesRoute;
 
   readonly ident = "notes";
 
@@ -27,6 +27,6 @@ export class ModuleRoot extends BaseRootController {
 
   // маркер доступа маршрута — в его строку списка: клиент видит, что маршрут требует прав
   markersToRoute(route: NotesRoute, markers: MarkerType) {
-    route.access = markers[AccessController.markerName];
+    route.access = markers[AccessController.MarkerName];
   }
 }

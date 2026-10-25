@@ -11,9 +11,9 @@ type Incoming = { to?: string; text: string };
 function onMessage(from: string, _socket: WebSocket, data: string) {
   const { to, text } = JSON.parse(data) as Incoming;
   const message = JSON.stringify({ from, text });
-  if (!to) return Chat.sockets.broadcast(message);
+  if (!to) return Chat.Sockets.broadcast(message);
 
-  Chat.sockets.send(to, message);
+  Chat.Sockets.send(to, message);
   // адресату — ещё и событие в поток SSE: реестр доступен из любого кода процесса
   const total = (unread.get(to) ?? 0) + 1;
   unread.set(to, total);
@@ -22,7 +22,7 @@ function onMessage(from: string, _socket: WebSocket, data: string) {
 
 @Controller()
 export class Chat {
-  static sockets = new AomWebSockets(onMessage);
+  static Sockets = new AomWebSockets(onMessage);
 
   /** Ключ соединения — id текущего пользователя: под ним сокет попадёт в реестр. */
   @Middleware()

@@ -119,9 +119,9 @@ export class AccessMarker extends AomAccessMarkerElement {
 
 @Controller()
 export class AccessController extends BaseAccessController {
-  static readonly markerName = "access";
+  static readonly MarkerName = "access";
 
-  static readonly allowedAccessTypes = Object.values(Permissions);
+  static readonly AllowedAccessTypes = Object.values(Permissions);
 
   static readonly AccessMarker = AccessMarker;
 
@@ -133,15 +133,15 @@ export class AccessController extends BaseAccessController {
   /** карта доступа текущего пользователя: его роль и действующие типы полномочий */
   @Middleware()
   static async Grant(@This() access: AccessController, @This(CurrentUser) { user }: CurrentUser) {
-    access.generateAccessMap(AccessController.allowedAccessTypes, [roles[user.role]]);
+    access.generateAccessMap(AccessController.AllowedAccessTypes, [roles[user.role]]);
   }
 }
 ```
 
 `BaseAccessController` из `@aom-js/api` — механизм проверки прав по маркерам маршрутов. Наследник задаёт четыре статических поля:
 
-- `markerName` — ключ, под которым требование доступа хранится в маркерах маршрута;
-- `allowedAccessTypes` — типы полномочий приложения. Тип — крупная категория маршрутов («администрирование», «модерация»); маршрут требует один или несколько типов, а роль даёт доступ внутри них. Здесь тип один;
+- `MarkerName` — ключ, под которым требование доступа хранится в маркерах маршрута;
+- `AllowedAccessTypes` — типы полномочий приложения. Тип — крупная категория маршрутов («администрирование», «модерация»); маршрут требует один или несколько типов, а роль даёт доступ внутри них. Здесь тип один;
 - `AccessMarker` — схема маркера: наследник `AomAccessMarkerElement`, в котором поле типов описано перечислением приложения, — так оно попадает в схему ответа корня;
 - `AccessCore` — класс метаданных доступа; хватает базового `AomAccessCore`.
 
@@ -298,7 +298,7 @@ class NotesRoutes extends RoutesStructure<NotesRoute> {}
 export class ModuleRoot extends BaseRootController {
   static readonly RoutesStructure = NotesRoutes;
 
-  readonly RouteElement = NotesRoute;
+  static readonly RouteElement = NotesRoute;
 
   readonly ident = "notes";
 
@@ -306,7 +306,7 @@ export class ModuleRoot extends BaseRootController {
 
   // маркер доступа маршрута — в его строку списка: клиент видит, что маршрут требует прав
   markersToRoute(route: NotesRoute, markers: MarkerType) {
-    route.access = markers[AccessController.markerName];
+    route.access = markers[AccessController.MarkerName];
   }
 }
 ```

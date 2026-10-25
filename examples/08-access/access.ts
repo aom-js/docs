@@ -18,9 +18,9 @@ export class AccessMarker extends AomAccessMarkerElement {
 
 @Controller()
 export class AccessController extends BaseAccessController {
-  static readonly markerName = "access";
+  static readonly MarkerName = "access";
 
-  static readonly allowedAccessTypes = Object.values(Permissions);
+  static readonly AllowedAccessTypes = Object.values(Permissions);
 
   static readonly AccessMarker = AccessMarker;
 
@@ -32,6 +32,6 @@ export class AccessController extends BaseAccessController {
   /** карта доступа текущего пользователя: его роль и действующие типы полномочий */
   @Middleware()
   static async Grant(@This() access: AccessController, @This(CurrentUser) { user }: CurrentUser) {
-    access.generateAccessMap(AccessController.allowedAccessTypes, [roles[user.role]]);
+    access.generateAccessMap(AccessController.AllowedAccessTypes, [roles[user.role]]);
   }
 }

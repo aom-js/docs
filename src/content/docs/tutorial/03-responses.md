@@ -262,7 +262,7 @@ class LibraryRoutes extends RoutesStructure<LibraryRoute> {}
 export class ModuleRoot extends BaseRootController {
   static readonly RoutesStructure = LibraryRoutes;
 
-  readonly RouteElement = LibraryRoute;
+  static readonly RouteElement = LibraryRoute;
 
   readonly ident = "library";
 
