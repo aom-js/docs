@@ -526,15 +526,15 @@ export function plain(cursors: AomCursor[], into: AomCursor[] = []): AomCursor[]
 
 `@Marker()` помечает статический метод сигнатуры `(route: AomRoute, cursor: AomCursor) => void`; `@UseMarker(marker)` привязывает его к методу. При создании маршрута для каждого курсора вызываются все маркеры его мета-инстанса, с `this` = класс маркера (`packages/router/src/common/route.ts` (`AomRoute`)). Это **build-time** механизм: на запросе маркеры не выполняются, результат живёт в `route.markers` (`Record<string, any>`).
 
-`packages/api/src/controllers/access/access-controller.ts` (`BaseAccessController.setAccessMark`)
+`packages/api/src/controllers/access/access-controller.ts` (`BaseAccessController.SetAccessMark`)
 
 ```ts
   // установить типичный доступ с учетом требований к конкретным типам партнерств
   @Marker()
-  static setAccessMark(route: AomRoute, cursor: AomCursor): void {
+  static SetAccessMark(route: AomRoute, cursor: AomCursor): void {
 ```
 
-Маркер срабатывает столько раз, сколько курсоров с ним в маршруте, и читает `cursor.origin._` — место сцепки, а не место объявления. На этом построена карта доступа: `@aom-js/api` собирает `route.markers[markerName]`, а приложение фильтрует по нему список маршрутов. Механика маркера доступа — [`@aom-js/api`](api.md).
+Маркер срабатывает столько раз, сколько курсоров с ним в маршруте, и читает `cursor.origin._` — место сцепки, а не место объявления. На этом построена карта доступа: `@aom-js/api` собирает `route.markers[MarkerName]`, а приложение фильтрует по нему список маршрутов. Механика маркера доступа — [`@aom-js/api`](api.md).
 
 ### Сборка OpenAPI (`OpenApi.registerPath`)
 
