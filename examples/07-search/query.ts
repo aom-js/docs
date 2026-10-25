@@ -14,15 +14,14 @@ export class CountriesFilter {
   @PropertySchema.Boolean({ isOptional: true, description: "true — только активные, false — только выключенные" })
   active?: boolean;
 
-  // строки, а не числа: PropertySchema.Number приводит значение целиком и список не разбирает
-  @PropertySchema.String({
+  // TransformToArray делит строку по запятым, потом Number приводит и проверяет каждый элемент
+  @PropertySchema.Number({
     isArray: true,
     isOptional: true,
-    pattern: "^\\d+$",
     decorators: [TransformToArray()],
     description: "ID стран: ?ids=1&ids=2 или ?ids=1,2",
   })
-  ids?: string[];
+  ids?: number[];
 }
 
 @Controller()

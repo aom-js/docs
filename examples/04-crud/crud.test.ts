@@ -131,8 +131,8 @@ describe("подводные камни ресурса", () => {
       @Next(EntityController.Data)
       static async Index() {}
     }
-    // у EntityController нет `schema`: описание ответа падает на undefined
-    expect(() => build(Wrong)).toThrow(/reading 'constructor'/);
+    // у EntityController нет `schema`: роутер называет шаг, которому нечем описать ответ
+    expect(() => build(Wrong)).toThrow(/OPENAPI_SCHEMA_UNDEFINED_ERROR: response of EntityController\.Data/);
   });
 
   it("без шага CountryValue.Init объект значения пуст: @This его не заполнит", async () => {

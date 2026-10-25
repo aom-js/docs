@@ -19,12 +19,8 @@ sidebar:
 ## Схемы
 
 ```ts title="06-body/schemas.ts"
+import { TransformTrim } from "@aom-js/api";
 import { ComponentSchema, PartialType, PickType, PropertySchema } from "@aom-js/schemer";
-import { Transform } from "class-transformer";
-import { IsDefined } from "class-validator";
-
-// обрезает только строки: число или null остаются как есть, и проверка типа их отвергнет
-const Trim = () => Transform(({ value }) => (typeof value === "string" ? value.trim() : value));
 
 /** Страна в хранилище — то, что отдаёт API. */
 @ComponentSchema({ description: "Страна" })
@@ -33,10 +29,10 @@ export class Country {
   id!: string;
 
   // обрезка — в decorators: так её унаследуют тела из PickType и PartialType
-  @PropertySchema.String({ minLength: 1, maxLength: 64, decorators: [Trim()], description: "Название" })
+  @PropertySchema.String({ minLength: 1, maxLength: 64, decorators: [TransformTrim()], description: "Название" })
   name!: string;
 
-  @PropertySchema.String({ minLength: 2, maxLength: 2, decorators: [Trim()], description: "Код ISO 3166" })
+  @PropertySchema.String({ minLength: 2, maxLength: 2, decorators: [TransformTrim()], description: "Код ISO 3166" })
   isoCode!: string;
 
   @PropertySchema.Boolean({ isOptional: true, description: "Показывать в списках" })
@@ -52,7 +48,7 @@ export class City {
   @PropertySchema.String({ readOnly: true, description: "ID страны" })
   countryId!: string;
 
-  @PropertySchema.String({ minLength: 1, maxLength: 64, decorators: [Trim()], description: "Название" })
+  @PropertySchema.String({ minLength: 1, maxLength: 64, decorators: [TransformTrim()], description: "Название" })
   name!: string;
 
   @PropertySchema.Number({ minValue: 0, isOptional: true, description: "Население" })
@@ -72,16 +68,10 @@ export class CityBodyDTO extends PickType(City, ["name", "population"]) {}
 /** Составное тело: страна и её города, каждая часть — по своей схеме. */
 @ComponentSchema({ description: "Страна вместе с городами" })
 export class CountryWithCitiesDTO {
-  // без IsDefined вложенное поле можно не прислать вовсе: ValidateNested пропускает undefined
-  @PropertySchema.Type({ value: () => CountryBodyDTO, decorators: [IsDefined()], description: "Страна" })
+  @PropertySchema.Type({ value: () => CountryBodyDTO, description: "Страна" })
   country!: CountryBodyDTO;
 
-  @PropertySchema.Type({
-    value: () => CityBodyDTO,
-    isArray: true,
-    decorators: [IsDefined()],
-    description: "Города",
-  })
+  @PropertySchema.Type({ value: () => CityBodyDTO, isArray: true, description: "Города" })
   cities!: CityBodyDTO[];
 }
 ```
@@ -90,11 +80,13 @@ export class CountryWithCitiesDTO {
 
 - `PickType(Country, [...])` берёт нужные поля вместе с их проверками. `id` в списке нет: его задаёт сервер, и прислать его клиент не сможет — поле просто отбросится.
 - `PartialType(CountryBodyDTO)` делает все поля необязательными, но присланные проверяет по тем же правилам. Это тело частичной правки.
-- `CountryWithCitiesDTO` — составное тело: каждая его часть описана своей схемой через `PropertySchema.Type`. `isArray: true` — массив, каждый элемент которого проверяется по `CityBodyDTO`.
+- `CountryWithCitiesDTO` — составное тело: каждая его часть описана своей схемой через `PropertySchema.Type`. `isArray: true` — массив, каждый элемент которого проверяется по `CityBodyDTO`. Без `isOptional` часть обязательна: тело без неё получает 400.
 
 Результат `PickType`/`PartialType` оборачивается в именованный класс со своим `@ComponentSchema()`: имя класса становится именем схемы в OpenAPI. Подробно о сборке тел — [`@aom-js/schemer`](../packages/schemer.md#mapped-types) §«Mapped-types».
 
-Обрезка пробелов и `IsDefined` переданы в параметр `decorators`, а не повешены рядом отдельными декораторами: `PickType` и `PartialType` пересобирают поля из параметров фабрики, и только то, что лежит в них, попадает в новые схемы.
+Обрезка пробелов (`TransformTrim` из `@aom-js/api`) передана в параметр `decorators`, а не повешена рядом отдельным декоратором: `PickType` и `PartialType` пересобирают поля из параметров фабрики, и только то, что лежит в них, попадает в новые схемы. `TransformTrim` обрезает только строки: число или массив вместо строки он не трогает, и проверка типа их отвергает.
+
+`PropertySchema.Boolean` принимает `true`/`false`, а из строк — только `"true"`/`"1"` и `"false"`/`"0"`: так флаг можно прислать и в JSON, и в строке запроса. Всё остальное (`"yes"`, пустая строка, число `1`) — 400.
 
 ## Тела
 
@@ -285,19 +277,16 @@ curl -X POST localhost:3000/countries -H 'content-type: application/json' -d '{"
 
 Тест `examples/06-body/body.test.ts` проверяет:
 
-- создание: «POST /countries создаёт страну: строки обрезаны, лишние поля и чужой id отброшены», «без обязательного поля — 400 с именем поля, в хранилище ничего», «неверный тип или длина — 400; строка из пробелов после обрезки пуста»;
+- создание: «POST /countries создаёт страну: строки обрезаны, лишние поля и чужой id отброшены», «без обязательного поля — 400 с именем поля, в хранилище ничего», «неверный тип или длина — 400; строка из пробелов после обрезки пуста», «булево поле принимает true/false и строки "true"/"false"/"1"/"0", прочее — 400»;
 - частичную правку: «PATCH меняет только присланные поля», «PATCH проверяет присланные поля по той же схеме», «PATCH не даёт стереть обязательное поле через null», «PATCH неизвестной страны — 404 раньше проверки тела»;
 - составное тело: «страна и города проверяются каждый по своей схеме и записываются вместе», «ошибка в одном городе — 400 с путём до поля, не записано ничего», «без вложенной части — 400»;
-- подводные камни ниже: «строка вместо булева не даёт 400: ядро приводит её к boolean», «TransformTrim из ядра делает строкой что угодно, и проверка типа не срабатывает», «PropertySchema.Type без IsDefined пропускает тело без вложенной части, хотя в схеме она required», «mapped-type прямо в BodyBuilder: схемы получают одно служебное имя, в документе остаётся первая», «декоратор рядом с PropertySchema, а не в decorators, PartialType теряет»;
+- подводные камни ниже: «mapped-type прямо в BodyBuilder: схемы получают одно служебное имя, в документе остаётся первая», «декоратор рядом с PropertySchema, а не в decorators, PartialType теряет»;
 - документ: «схемы тел — в документе OpenAPI».
 
 После каждого теста хранилище сбрасывается (`resetStore`), чтобы тесты не зависели от порядка.
 
 ## Подводные камни
 
-- **`TransformTrim` из `@aom-js/api` делает строкой что угодно.** Он вызывает `String(value).trim()`: число `123` становится `"123"`, `null` — строкой `"null"`, и проверка типа после него уже не срабатывает. Поэтому в теле запроса нужна своя обрезка `Trim`, которая трогает только строки.
-- **Булево приводится до проверки.** `PropertySchema.Boolean` понимает `"true"` и `"false"`, а другую строку переводит в булево через число: `"yes"` даёт `false`, а не 400.
-- **`PropertySchema.Type` без `isOptional` не требует поле.** В схеме OpenAPI оно в списке `required`, но тело без него проверку проходит, и обработчик получает `undefined`. Нужен `IsDefined()` в `decorators`, как в `CountryWithCitiesDTO`.
 - **`PartialType` пропускает `null`.** Он делает поля необязательными через `isOptional`, а необязательное поле в class-validator принимает и `undefined`, и `null`. Если поле нельзя стирать, проверьте это в обработчике, как в `Country.Update`.
 - **Декоратор рядом с `PropertySchema` теряется в `PickType`/`PartialType`.** Они переносят только параметры фабрики. `@Transform(...)` над полем работает в исходной схеме и молча пропадает в производной — дополнительные проверки и преобразования передавайте через `decorators`.
 - **Mapped-type прямо в `BodyBuilder`.** `BodyBuilder(PartialType(CountryBodyDTO))` проверяет тело верно, но в OpenAPI схема получит служебное имя `PartialClassType`, общее для всех таких классов, и из нескольких таких схем в документе останется только первая. Оборачивайте в именованный класс — [`@aom-js/schemer`](../packages/schemer.md#ограничения) §«Ограничения».

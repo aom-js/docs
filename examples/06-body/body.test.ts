@@ -1,4 +1,4 @@
-import { BodyBuilder, TransformTrim } from "@aom-js/api";
+import { BodyBuilder } from "@aom-js/api";
 import { Before, Controller, OpenApi, Post, Router } from "@aom-js/router";
 import { ComponentSchema, PartialType, PropertySchema, Schemer } from "@aom-js/schemer";
 import { Transform } from "class-transformer";
@@ -64,6 +64,16 @@ describe("проверка входящих данных", () => {
         expect(json.data[0].constraints).toHaveProperty(constraint);
       }
       expect(store.countries).toEqual([]);
+    });
+    it("булево поле принимает true/false и строки \"true\"/\"false\"/\"1\"/\"0\", прочее — 400", async () => {
+      const enabled = (value: unknown) => send("POST", "/countries", { name: "Франция", isoCode: "FR", enabled: value });
+      expect((await enabled("false")).json.enabled).toBe(false);
+      expect((await enabled("1")).json.enabled).toBe(true);
+      for (const value of ["yes", "", 1]) {
+        const { status, json } = await enabled(value);
+        expect(status).toBe(400);
+        expect(json.data[0]).toMatchObject({ property: "enabled", constraints: { isBoolean: expect.any(String) } });
+      }
     });
   });
 
@@ -142,40 +152,6 @@ describe("проверка входящих данных", () => {
   });
 
   describe("подводные камни", () => {
-    it("строка вместо булева не даёт 400: ядро приводит её к boolean", async () => {
-      const { status, json } = await send("POST", "/countries", { name: "Франция", isoCode: "FR", enabled: "yes" });
-      expect(status).toBe(200);
-      expect(json.enabled).toBe(false);
-    });
-
-    it("TransformTrim из ядра делает строкой что угодно, и проверка типа не срабатывает", () => {
-      @ComponentSchema()
-      class Named {
-        @PropertySchema.String({ isOptional: true, decorators: [TransformTrim()] })
-        name?: string;
-      }
-      for (const [input, output] of [[123, "123"], [null, "null"]] as const) {
-        const { values, errors } = schemer.validate(Named, { name: input });
-        expect(errors).toEqual([]);
-        expect(values).toMatchObject({ name: output });
-      }
-    });
-
-    it("PropertySchema.Type без IsDefined пропускает тело без вложенной части, хотя в схеме она required", () => {
-      @ComponentSchema()
-      class Part {
-        @PropertySchema.String({})
-        name!: string;
-      }
-      @ComponentSchema()
-      class Whole {
-        @PropertySchema.Type({ value: () => Part })
-        part!: Part;
-      }
-      expect(schemer.validate(Whole, {}).errors).toEqual([]);
-      expect(schemer.render(Whole).required).toEqual(["part"]);
-    });
-
     it("mapped-type прямо в BodyBuilder: схемы получают одно служебное имя, в документе остаётся первая", () => {
       @ComponentSchema()
       class First {

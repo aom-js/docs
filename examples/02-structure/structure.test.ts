@@ -122,21 +122,22 @@ describe("структура: циклы", () => {
     }).toThrow(ReferenceError);
   });
 
-  it("FwdRef в @Before разворачивается при объявлении: класс ниже ещё недоступен", () => {
-    expect(() => {
-      @Controller()
-      class List {
-        @Get("/")
-        @Before(FwdRef(() => Guard.Check))
-        static async Index() {}
-      }
+  it("FwdRef в @Before разворачивается при сборке роутера: класс ниже уже есть", () => {
+    @Controller()
+    class List {
+      @Get("/")
+      @Before(FwdRef(() => Guard.Check))
+      static async Index() {}
+    }
 
-      @Controller()
-      class Guard {
-        @Middleware()
-        static async Check() {}
-      }
-    }).toThrow(ReferenceError);
+    @Controller()
+    class Guard {
+      @Middleware()
+      static async Check() {}
+    }
+
+    const { steps } = new Router(List, docs()).routeOf(List.Index).toJSON();
+    expect(steps.map(({ step }) => step)).toEqual(["Guard.Check", "List.Index"]);
   });
 
   it("FwdRef в @This разрешается на запросе: класс ниже уже есть", async () => {

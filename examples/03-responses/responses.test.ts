@@ -86,9 +86,14 @@ describe("ответы и ошибки", () => {
     ]);
   });
 
-  it("у успешного ответа описание — только из аргумента JSONSchema", () => {
-    expect(MessageResponse.JSONSchema()).toMatchObject({ status: 200, description: "" });
-    expect(MessageResponse.JSONSchema("Создано", 201)).toMatchObject({ status: 201, description: "Создано" });
+  it("успешный ответ без аргументов JSONSchema берёт статус и описание своего класса", () => {
+    class Created extends MessageResponse {
+      static status = 201;
+      static description = "Создано";
+    }
+    expect(MessageResponse.JSONSchema()).toMatchObject({ status: 200, description: MessageResponse.description });
+    expect(Created.JSONSchema()).toMatchObject({ status: 201, description: "Создано" });
+    expect(Created.JSONSchema("Принято", 202)).toMatchObject({ status: 202, description: "Принято" });
   });
 
   it("два ответа с одним статусом — в документе остаётся последний", () => {
@@ -133,9 +138,9 @@ describe("ответы и ошибки", () => {
     );
   });
 
-  it("схема ошибки требует data, хотя тело без подробностей его не содержит", async () => {
+  it("data в схеме ошибки необязательное: в теле без подробностей его нет", async () => {
     const doc = await (await fetch(`${api.url}/openapi.json`)).json();
-    expect(doc.components.schemas.NotFoundResponse.required).toContain("data");
+    expect(doc.components.schemas.NotFoundResponse.required).not.toContain("data");
     const body = await (await fetch(`${api.url}/api/books/9`)).json();
     expect(body).not.toHaveProperty("data");
   });
@@ -189,10 +194,10 @@ describe("тексты на языке запроса", () => {
     expect(doc.components.schemas.NotFoundResponse.properties.message.description).toBe("Error text");
   });
 
-  it("адрес без маршрута отвечает непереведённым кодом", async () => {
+  it("адрес без маршрута тоже отвечает текстом на языке запроса", async () => {
     const res = await fetch(`${url}/nope?locale=en`);
     expect(res.status).toBe(404);
-    expect((await res.json()).message).toBe("AOM_API:PATH_NOT_FOUND");
+    expect((await res.json()).message).toBe("Path not found");
   });
 
   it("код заменяется в любом месте ответа, и в данных тоже", () => {

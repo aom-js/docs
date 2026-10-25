@@ -24,7 +24,7 @@ export class CountriesData {
       self.where.push((country) => country.active === query.active);
     }
     if (query.ids) {
-      const ids = query.ids.map(Number);
+      const ids = query.ids;
       self.where.push((country) => ids.includes(country.id));
     }
   }

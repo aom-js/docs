@@ -1,5 +1,3 @@
-import { SafeData, TransformToArray } from "@aom-js/api";
-import { ComponentSchema, PropertySchema } from "@aom-js/schemer";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { serve } from "../serve";
@@ -67,20 +65,19 @@ describe("поиск и фильтры", () => {
   });
 
   it("неверные значения — 400", async () => {
-    const wrong = ["?ids=x", "?ids=1,3&ids=5", "?limit=abc", "?limit=0", "?limit=101", "?offset=-1", "?sort=zzz"];
+    const wrong = ["?search=a&search=b", "?ids=x", "?ids=1,3&ids=5", "?limit=abc", "?limit=0", "?limit=101", "?offset=-1", "?sort=zzz"];
     for (const query of wrong) {
       expect((await list(query)).status, query).toBe(400);
     }
     expect((await total("?ids=x")).body).toMatchObject({ status: 400, message: "AOM_API:ERROR_WRONG_DATA" });
   });
 
-  it("повтор строкового параметра не даёт 400: search=a&search=b склеивается в одну строку", async () => {
-    expect(await list("?search=a&search=b")).toEqual({ status: 200, ids: [] });
-  });
-
-  it("логический флаг не отказывает на мусоре: active=yes значит false", async () => {
+  it("active принимает и 1/0, другие значения — 400", async () => {
     expect((await list("?active=1")).ids).toEqual([1, 2, 3, 5]);
-    expect((await list("?active=yes")).ids).toEqual([4, 6]);
+    expect((await list("?active=0")).ids).toEqual([4, 6]);
+    for (const query of ["?active=yes", "?active=", "?active=TRUE"]) {
+      expect((await list(query)).status, query).toBe(400);
+    }
   });
 
   it("документ OpenAPI показывает параметры фильтра у обоих маршрутов, страницы — только у списка", async () => {
@@ -94,20 +91,5 @@ describe("поиск и фильтры", () => {
     expect(limit).toMatchObject({ schema: { minimum: 1, maximum: 100, default: 20 } });
     expect(limit.required).toBeUndefined();
     expect(doc.paths["/api/countries"].get.responses["400"]).toBeDefined();
-  });
-});
-
-// антипример со страницы: числовое поле со списком
-@ComponentSchema()
-class NumberIds {
-  @PropertySchema.Number({ isArray: true, isOptional: true, decorators: [TransformToArray()] })
-  ids?: number[];
-}
-
-describe("PropertySchema.Number со списком", () => {
-  it("не разбирает ни один id, ни список через запятую", async () => {
-    const parse = SafeData(NumberIds) as (query: object) => Promise<NumberIds>;
-    await expect(parse({ ids: "1" })).rejects.toMatchObject({ status: 400 });
-    await expect(parse({ ids: "1,2" })).rejects.toMatchObject({ status: 400 });
   });
 });
