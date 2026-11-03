@@ -231,6 +231,7 @@ const STATUS_ERROR_MESSAGES: Record<number, string> = {
   413: messages.ERROR_PAYLOAD_TOO_LARGE,
   423: messages.ERROR_DATA_LOCKED,
   424: messages.ERROR_WRONG_DEPENDENCY,
+  429: messages.ERROR_TOO_MANY_REQUESTS,
   500: messages.SERVER_ERROR,
 };
 // ...
@@ -461,7 +462,7 @@ const { accessTypes } = extraPoint;
 
 `RateLimit` — основа лимита частоты запросов: считает запросы по ключу в лимитере библиотеки `rate-limiter-flexible` и отвечает `429` с заголовком `Retry-After`, когда лимит исчерпан (`packages/api/src/controllers/rate-limit.ts` (`RateLimit`)). Наследник задаёт `static Limiter` — один объект на все запросы — и шаг, который до `Apply` кладёт в `self.key` то, по чему считать: IP-адрес, id пользователя, логин. Шаг с `@After(Наследник.Apply)` ставит `Apply` сразу за собой, а `@This()` отдаёт им один и тот же объект класса на запрос. Лимитер лежит в `static`, а не в поле: объект класса создаётся заново на каждый запрос, и лимитер в его поле начинал бы счёт с нуля каждый раз; поэтому `limiter` у экземпляра — геттер, возвращающий `Limiter` класса.
 
-`Apply` списывает `points` (по умолчанию 1) ключа `key` через `Limiter.consume`. Пока очки остаются, запрос идёт дальше. Когда отказ приходит как `RateLimiterRes` (лимит ключа исчерпан), `Apply` ставит `Retry-After` в целых секундах — `Math.max(1, Math.ceil(msBeforeNext / 1000))`, не меньше 1 — и только если у `ctx.res` есть `setHeader`, а затем бросает `TooManyRequestsResponse` (429) со стандартным сообщением `ERROR_TOO_MANY_REQUESTS`, без `data`. Маршруту, к которому шаг подключён, `Apply` добавляет в OpenAPI ответ 429 через `@Responses(TooManyRequestsResponse.JSONSchema())`.
+`Apply` списывает `points` (по умолчанию 1) ключа `key` через `Limiter.consume`. Пока очки остаются, запрос идёт дальше. Когда отказ приходит как `RateLimiterRes` (лимит ключа исчерпан), `Apply` ставит `Retry-After` в целых секундах — `Math.max(1, Math.ceil(msBeforeNext / 1000))`, не меньше 1 — и только если есть `ctx.res` и у него `setHeader`, а затем бросает `TooManyRequestsResponse` (429) со стандартным сообщением `ERROR_TOO_MANY_REQUESTS`, без `data`. Маршруту, к которому шаг подключён, `Apply` добавляет в OpenAPI ответ 429 через `@Responses(TooManyRequestsResponse.JSONSchema())`.
 
 Остальные отказы — не 429:
 
