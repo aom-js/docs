@@ -5,10 +5,10 @@
     "": {
       "name": "@aom-js/docs",
       "dependencies": {
-        "@aom-js/api": "0.2.1",
-        "@aom-js/core": "0.2.1",
-        "@aom-js/router": "0.2.1",
-        "@aom-js/schemer": "0.2.1",
+        "@aom-js/api": "0.2.2",
+        "@aom-js/core": "0.2.2",
+        "@aom-js/router": "0.2.2",
+        "@aom-js/schemer": "0.2.2",
         "@astrojs/markdown-remark": "^7.3.4",
         "@astrojs/starlight": "^0.42.7",
         "astro": "^7.4.2",
@@ -27,15 +27,15 @@
     },
   },
   "packages": {
-    "@aom-js/api": ["@aom-js/api@0.2.1", "", { "dependencies": { "@aom-js/core": "0.2.1", "@aom-js/router": "0.2.1", "@aom-js/schemer": "0.2.1", "@aom-js/visualizer": "0.2.1", "dayjs": "^1.11.21", "es-toolkit": "^1.50.0", "rate-limiter-flexible": "^11.2.4", "reflect-metadata": "^0.2.2", "ws": "^8.21.2" } }, "sha512-W5WaRnCs6I9wx+xe5s3CHe//gUYej+UAevw1zSyF5+uugpfjmecPdFD3Zltc2feu99vt9XUUfpgsNo+OTpzoNQ=="],
+    "@aom-js/api": ["@aom-js/api@0.2.2", "", { "dependencies": { "@aom-js/core": "0.2.2", "@aom-js/router": "0.2.2", "@aom-js/schemer": "0.2.2", "@aom-js/visualizer": "0.2.2", "dayjs": "^1.11.21", "es-toolkit": "^1.50.0", "rate-limiter-flexible": "^11.2.4", "reflect-metadata": "^0.2.2", "ws": "^8.21.2" } }, "sha512-swkkGLul8NmUM8PS4pwoODQps+OtAQrsWN0F2wWyjPFmO+x/s7OYUMa7vNBARdqVCALiebDZTlAvfqiWEZGcqg=="],
 
-    "@aom-js/core": ["@aom-js/core@0.2.1", "", {}, "sha512-06/+pqfCrWV5o3Qwf6Q5h5twRyXHDy527nJXCfC5boSFwqeC1uaEjQj6c6tMVYwJ1YnNtQ+iPEqKbW8L7Uajrg=="],
+    "@aom-js/core": ["@aom-js/core@0.2.2", "", {}, "sha512-XvPU+kIIVD0FZHD9O9b62rwmUJ37dj6rgQKv75ZI1m0fIFHf1ybONFRhMemwHiDg/gObJsxgU/aLseKK3jdrsA=="],
 
-    "@aom-js/router": ["@aom-js/router@0.2.1", "", { "dependencies": { "@aom-js/core": "0.2.1", "@aom-js/schemer": "0.2.1", "openapi3-ts": "^4.6.1", "reflect-metadata": "^0.2.2", "rxjs": "^7.8.2" } }, "sha512-kTJ8kZoAfAGak+OlEA0ErTP+lezkYvAYXibSwmN2K/ZLD/OOITRzdzi+Jux31X9KMmtAFD6rUPVxHLC2avsohQ=="],
+    "@aom-js/router": ["@aom-js/router@0.2.2", "", { "dependencies": { "@aom-js/core": "0.2.2", "@aom-js/schemer": "0.2.2", "openapi3-ts": "^4.6.1", "reflect-metadata": "^0.2.2", "rxjs": "^7.8.2" } }, "sha512-+Y5x+iY1X+Ff8s5HgNkJEOcWA7nOfFid9GY00O1DV1JYWp/IHgk228vgF6lYqskrlPQI68hmuocmID/uZQyb/g=="],
 
-    "@aom-js/schemer": ["@aom-js/schemer@0.2.1", "", { "dependencies": { "@aom-js/core": "0.2.1", "class-transformer": "^0.5.1", "class-validator": "^0.14.3", "class-validator-jsonschema": "^5.1.0", "reflect-metadata": "^0.2.2" } }, "sha512-bfUvFkCxDe7ihepYaCcRCslBz3TNGRbiwByB7fFM11ANWeLDR0rzBOktzztI68B0aJ+dznpV1mLlDUz5DbsL0A=="],
+    "@aom-js/schemer": ["@aom-js/schemer@0.2.2", "", { "dependencies": { "@aom-js/core": "0.2.2", "class-transformer": "^0.5.1", "class-validator": "^0.14.3", "class-validator-jsonschema": "^5.1.0", "reflect-metadata": "^0.2.2" } }, "sha512-3jiuAU0nRlhxAVS8hVYMnMJMuv4aSHUJF3t6/CoLy5m+/5Qm42KLwIiAFUTq2cGH6hzngXVJSpSyS7e1JKM/5A=="],
 
-    "@aom-js/visualizer": ["@aom-js/visualizer@0.2.1", "", { "dependencies": { "@aom-js/core": "0.2.1", "@aom-js/router": "0.2.1", "@aom-js/schemer": "0.2.1", "reflect-metadata": "^0.2.2" } }, "sha512-Feeq2LcYyHoTYE/z0Wc5BHZiuAteMvGWPCDZwcVRpKcmaM8keQc97Ma/JQFvZFdBMB6Tw6FexYMtdG23c79Q7g=="],
+    "@aom-js/visualizer": ["@aom-js/visualizer@0.2.2", "", { "dependencies": { "@aom-js/core": "0.2.2", "@aom-js/router": "0.2.2", "@aom-js/schemer": "0.2.2", "reflect-metadata": "^0.2.2" } }, "sha512-uukMsb8HQWHWhYojrbmygqcZa5SPKpTUT5RRzl+s7vEoUeJghGzl4+kc06i4qwKGbxL3mJuNUMrYe2QUpKsT9A=="],
 
     "@astrojs/compiler-binding": ["@astrojs/compiler-binding@0.5.2", "", { "optionalDependencies": { "@astrojs/compiler-binding-android-arm64": "0.5.2", "@astrojs/compiler-binding-darwin-arm64": "0.5.2", "@astrojs/compiler-binding-darwin-x64": "0.5.2", "@astrojs/compiler-binding-linux-arm64-gnu": "0.5.2", "@astrojs/compiler-binding-linux-arm64-musl": "0.5.2", "@astrojs/compiler-binding-linux-x64-gnu": "0.5.2", "@astrojs/compiler-binding-linux-x64-musl": "0.5.2", "@astrojs/compiler-binding-wasm32-wasi": "0.5.2", "@astrojs/compiler-binding-win32-arm64-msvc": "0.5.2", "@astrojs/compiler-binding-win32-x64-msvc": "0.5.2" } }, "sha512-lEn76+0JcMQ5RDXU0wSMWJg2ZppiZvSULpghC29cfv4o9bhvWFDbQjsCtvjjXN9iVLFQ7fL3wTR2L2UU13mP8g=="],
 
